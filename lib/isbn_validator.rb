@@ -1,34 +1,41 @@
-class IsbnValidator 
-VALID_CHARACTERS =['1','2','3','4','5','6','7','8','9','0','X']
-  #attr_accessor : isbn
+class IsbnValidator < ActiveModel::Validator
+  VALID_CHARACTERS = ['0', '1', '2', '3', '4', '5',
+                      '6', '7', '8', '9', '0', 'x']
+  
   attr_reader :isbn
-  #attr_writer :isbn
-
-	def initialize(isbn)
-    	if isbn.nil?
-	@isbn=""
-	else 
-	@isbn = cleanup_isbn(isbn)
-	end
+  
+  def validate(record)
+    if record.is_a?(String)
+      return valid?(record)
+    else
+      record.errors[:isbn] << "is not a valid ISBN" unless valid?(record.isbn)
     end
-	
-    	
-#Q5
-	def valid?
-if @isbn.size==10|| @isbn.size==13
-return true
-else return false
-end 
+    
+  end
+  
+  # This is a comment
+  def initialize(options = {})
+    super(options)
+  end
+  
+  def valid?(isbn)
+    isbn = cleanup_isbn(isbn)
+    if isbn.size == 10 || isbn.size == 13
+      isbn.chars.all? { |c| valid_character?(c) }
+    else
+      return false
+    end
+  end
+  
+  private
+  
+  def valid_character?(c)
+    return VALID_CHARACTERS.include?(c)
+  end
+  
+  def cleanup_isbn(isbn)
+isbn= "" if isbn.nil?
+    isbn.downcase.gsub("-", "").gsub(" ", "")
+  end  
+  
 end
-def self.valid_character?(c)
-return c=='1'||c=='2'||c=='3'||c=='4'||c=='5'||c=='6'||c=='7'||c=='8'||c=='9'||c=='0'||c=='x'||
-	
-	end
-	private
-	def cleanup_isbn(isbn)
-#Excercise 1 Q 2,3,4
-	return isbn.downcase.gsub("-","").gsub(" ","")
-	end
-
-end
-
