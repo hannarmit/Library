@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  book_id: 10
+  state: reserved
+  email: a@b
+
+two:
+  book_id: 11
+  state: free
+  email: b@a

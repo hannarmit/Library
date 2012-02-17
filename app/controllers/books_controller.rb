@@ -1,44 +1,52 @@
 class BooksController < ApplicationController
+  
+  before_filter :find_book, only: [:show, :edit, :update, :destroy]
 
- def index
-  @books = Book.all
- end
-
- def show
-  @book =Book.find(params[:id])
- end
-def new
-
- @book= Book.new
-end
- def create
-  @book = Book.new(params[:book])
-  if @book.save
-   flash[:notice] ="Book created"
-   redirect_to books_path
- else
-   render action: :new
+  def index
+    @books = Book.all
   end
- end
-# GET /book/:id/edit
+  
+  def show
+    @book_reservation = @book.reservation
+  end
+  
+  def new
+    @book = Book.new
+  end
+  
+  def create
+    @book = Book.new(params[:book])
+    if @book.save
+      flash[:notice] = "Book created"
+      redirect_to books_path
+    else
+      render action: :new
+    end
+  end
+  
   def edit
-    @book = Book.find(params[:id])
   end
- # PUT /books/:id
+  
   def update
-    @book = Book.find(params[:id])
     if @book.update_attributes(params[:book])
       flash[:notice] = "Book saved"
       redirect_to book_path(@book)
     else
       render action: :edit
     end
-end
-def destroy
-    @book = Book.find(params[:id])
+  end
+  
+  def destroy
     @book.destroy
     flash[:notice] = "Book deleted"
     redirect_to books_path
   end
   
+  
+  private
+  
+  def find_book
+    @book = Book.find(params[:id])
   end
+
+end

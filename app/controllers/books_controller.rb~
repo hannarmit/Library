@@ -40,5 +40,5 @@ def destroy
     flash[:notice] = "Book deleted"
     redirect_to books_path
   end
-  end
+  
   end
